@@ -37,6 +37,8 @@ type Notice = { type: 'success' | 'error'; text: string } | null;
 const DPI = 300;
 const PX_PER_MM = DPI / 25.4;
 const A4_PORTRAIT = { width: 2480, height: 3508 };
+const PASSPORT_WIDTH = Math.round(40 * PX_PER_MM);
+const PASSPORT_HEIGHT = Math.round(50 * PX_PER_MM);
 const NID_WIDTH = Math.round(85.6 * PX_PER_MM);
 const NID_HEIGHT = Math.round(53.98 * PX_PER_MM);
 
@@ -247,7 +249,7 @@ export default function PrintReadyStudio({ mode }: PrintReadyStudioProps) {
   const specification = mode === 'passport' ? text.passportSpec : mode === 'nid' ? text.nidSpec : text.a4Spec;
   const hasOutput = mode === 'nid' ? Boolean(frontImage || backImage) : Boolean(mainImage);
   const outputDimensions = mode === 'passport'
-    ? { width: 400, height: 500 }
+    ? { width: PASSPORT_WIDTH, height: PASSPORT_HEIGHT }
     : mode === 'nid' || a4Orientation === 'portrait'
       ? A4_PORTRAIT
       : { width: A4_PORTRAIT.height, height: A4_PORTRAIT.width };
@@ -339,12 +341,12 @@ export default function PrintReadyStudio({ mode }: PrintReadyStudioProps) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const width = mode === 'passport'
-      ? 400
+      ? PASSPORT_WIDTH
       : mode === 'nid' || a4Orientation === 'portrait'
         ? A4_PORTRAIT.width
         : A4_PORTRAIT.height;
     const height = mode === 'passport'
-      ? 500
+      ? PASSPORT_HEIGHT
       : mode === 'nid' || a4Orientation === 'portrait'
         ? A4_PORTRAIT.height
         : A4_PORTRAIT.width;
@@ -727,7 +729,7 @@ export default function PrintReadyStudio({ mode }: PrintReadyStudioProps) {
               <div className="rounded-xl border border-slate-700 bg-slate-950 p-3">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{isBangla ? 'ফাইল ফরম্যাট' : 'File format'}</p>
                 <p className="mt-1 text-sm font-bold text-white">PNG · {specification}</p>
-                <p className="mt-1 text-[11px] leading-5 text-slate-500">{mode === 'passport' ? '400 × 500 px' : `${outputDimensions.width} × ${outputDimensions.height} px`}</p>
+                <p className="mt-1 text-[11px] leading-5 text-slate-500">{outputDimensions.width} × {outputDimensions.height} px</p>
               </div>
               <div className="mt-3 grid gap-2">
                 <button
